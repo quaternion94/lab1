@@ -8,7 +8,7 @@
  *
  * @author Arezius
  */
-
+ 
 public class BankAcount {
     public int id;
     public int UserId;
