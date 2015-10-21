@@ -27,9 +27,8 @@ public class PersonRepository implements IRepository<Person> {
 
     @Override
     public boolean Create(Person person) {
-        String query="INSERT INTO \"People\" (\"name\") "
-                + "VALUES (\""+ person.name+"\") ";
-
+        String query="INSERT INTO \"People\" (id,\"name\") "
+                + "VALUES (null,\""+ person.name+"\") ";
         try {
             return this.stmt.execute(query);
         } catch (SQLException ex) {
