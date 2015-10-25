@@ -20,21 +20,28 @@ import java.util.logging.Logger;
 public class PersonRepository implements IRepository<Person> {
     private Connection con=null;
     private Statement stmt=null;
-    public PersonRepository(Connection con) throws SQLException {
+    public PersonRepository(Connection con) {
         this.con = con;
-        this.stmt=con.createStatement();
+        try{
+            this.stmt=con.createStatement();
+            stmt.execute("CREATE TABLE PEOPLE(\n" +
+            "   ID INTEGER PRIMARY KEY   AUTOINCREMENT,\n" +
+            "   NAME  TEXT      NOT NULL)");
+        } catch(SQLException e)
+        {}
     } 
 
     @Override
-    public boolean Create(Person person) {
-        String query="INSERT INTO \"People\" (id,\"name\") "
-                + "VALUES (null,\""+ person.name+"\") ";
+    public Person Create(Person person) {
+        String query="INSERT INTO \"People\" (\"name\") "
+                + "VALUES (\""+ person.name+"\") ";
         try {
-            return this.stmt.execute(query);
+            this.stmt.execute(query);
+            return person;
         } catch (SQLException ex) {
             Logger.getLogger(ControllerSql.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.toString());
-            return false;
+            return null;
         }
     }
 
@@ -113,7 +120,7 @@ public class PersonRepository implements IRepository<Person> {
     @Override
     public List<Person> find(String key, String value)
     {
-        String query="SELECT * FROM \"People\" WHERE "+key+"=\""+value+"\"";
+        String query="SELECT * FROM \"People\" WHERE "+key+"="+value;
         try {
             ResultSet q =this.stmt.executeQuery(query);
             List<Person> people = new LinkedList(); 

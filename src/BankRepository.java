@@ -23,23 +23,30 @@ public class BankRepository implements IRepository<BankAcount> {
     private Connection con=null;
     private Statement stmt=null;
     
-    public BankRepository( Connection con) throws SQLException
+    public BankRepository( Connection con)
     {
         this.con = con;
-        this.stmt=con.createStatement();
+        try{
+            this.stmt=con.createStatement();            
+            stmt.execute("CREATE TABLE Accounts(\n" +
+    "   ID INTEGER PRIMARY KEY   AUTOINCREMENT,\n" +
+    "   USERID  INT, \n"
+                    + "AMOUNT REAL)");
+        } catch(SQLException e){  }
     }
 
     @Override
-    public boolean Create(BankAcount person) {
+    public BankAcount Create(BankAcount account) {
         String query="INSERT INTO \"Accounts\" (\"userid\", \"amount\") "
-                + "VALUES (\""+ person.UserId+"\" , \""+person.amount+"\") ";
+                + "VALUES ("+ account.UserId+" , "+account.amount+") ";
 
         try {
-            return this.stmt.execute(query);
+            this.stmt.execute(query);
+            return account;
         } catch (SQLException ex) {
             Logger.getLogger(ControllerSql.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.toString());
-            return false;
+            return null;
         }
     }
 
@@ -51,14 +58,11 @@ public class BankRepository implements IRepository<BankAcount> {
         try {
             ResultSet q =this.stmt.executeQuery(query);
             List<BankAcount> toes = new LinkedList(); 
-            String rezString = new String();
             while(q.next())
             {
-                BankAcount tmp =new BankAcount(q.getInt(1),q.getInt(1), q.getFloat(3));
+                BankAcount tmp =new BankAcount(q.getInt(1),q.getInt(2), q.getFloat(3));
                 toes.add(tmp);
-                rezString+=tmp.toString();
             }
-            System.out.println(rezString);
             return toes.get(0);
         } catch (SQLException ex) {
             Logger.getLogger(ControllerSql.class.getName()).log(Level.SEVERE, null, ex);

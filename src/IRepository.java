@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 interface IRepository<T> {
-    boolean Create(T entity);
+    T Create(T entity);
     T GetByID(int id);
     List<T> All();
     boolean Update(T entity);

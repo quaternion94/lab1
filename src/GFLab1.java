@@ -25,13 +25,12 @@ public class GFLab1 {
         DbConnection con = new DbConnection("org.sqlite.JDBC", "jdbc:sqlite:Lab1.sqlite");
         try {
             controller = new ControllerSql(con.getCon());
-            BankAcount USD = new BankAcount(1000);
-            BankAcount UAH = new BankAcount(40); 
             
-            controller.people.Create(new Person("Vlad Petrenko"));
-            controller.linkPersonToAccount(controller.people.find("name", "Vlad Petrenko").get(0), UAH);
-            controller.linkPersonToAccount(controller.people.find("name", "Vlad Petrenko").get(0), USD);            
+            controller.people.Create(new Person("Vlad Petrenko")); 
             
+            BankAcount USD = controller.acounts.Create(new BankAcount(1, controller.people.find("NAME", "\"Vlad Petrenko\"").get(0).id, 1000));
+            BankAcount UAH = controller.acounts.Create(new BankAcount(2, controller.people.find("NAME", "\"Vlad Petrenko\"").get(0).id, 40)); 
+
         } catch (SQLException ex) {
             Logger.getLogger(GFLab1.class.getName()).log(Level.SEVERE, null, ex);
         }

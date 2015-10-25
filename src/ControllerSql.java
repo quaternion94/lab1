@@ -37,7 +37,6 @@ public class ControllerSql{
     }
     public void linkPersonToAccount(Person p, BankAcount acount)
     {
-        people.Create(p);
         acount.UserId = p.id;
         if(!acounts.Update(acount))
             acounts.Create(acount);

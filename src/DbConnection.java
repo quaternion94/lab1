@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  * @author Arezius
  */
 
-
 public class DbConnection {
     private String url;
     private String driver;
